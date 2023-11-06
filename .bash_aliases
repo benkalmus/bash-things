@@ -1,0 +1,123 @@
+
+# bash aliases 
+
+# audio control 
+
+# swap audio left right for quadraphonic setup
+
+function audio-swap-lr () {
+  sudo cp /usr/share/pulseaudio/alsa-mixer/profile-sets/quadraphonic_swap_LR.conf /usr/share/pulseaudio/alsa-mixer/profile-sets/default.conf
+  if [[ $? -ne 0 ]]; then return; fi 
+  pulseaudio -k
+  sleep 0.3
+  pulseaudio --start
+}
+
+function audio-default () {
+  sudo cp /usr/share/pulseaudio/alsa-mixer/profile-sets/quadraphonic_default.conf /usr/share/pulseaudio/alsa-mixer/profile-sets/default.conf
+  if [[ $? -ne 0 ]]; then return; fi
+  pulseaudio -k
+  sleep 0.3
+  pulseaudio --start
+}
+
+# monitor control 
+
+function brt-all () {
+  if [[ -z $1 ]]; then
+    printf "Usage:\nbrt-all brightness[0-100]\n"
+    ddcutil --display 1 getvcp 10
+    return 1
+  fi
+  local brightness=${1:-50}
+  local monitors=$( ddcutil detect | grep -Po "Display \d" | wc -l )
+  for i in $(seq 1 $monitors );do 
+    echo "ddcutil --display $i setvcp 10 $brightness"
+    echo "Current brightness:"
+    ddcutil --display $i setvcp 10 $brightness >/dev/null
+  done
+}
+
+function brt () {
+  local monitor=$1
+  local brightness=$2
+  if [[ -z "$2"  ]] || [[ -z "$1" ]]; then 
+    printf "Usage:\nbrt monitor[1-9] brightness[0-100]\n"
+    printf "monitors: \n$( ddcutil detect | grep -Po "Display \d")\n"
+    printf "Current brightness:\n"
+    ddcutil --display "${1:-1}" getvcp 10
+    return 1
+  fi 
+  echo "ddcutil --display $monitor setvcp 10 $brightness"
+  ddcutil --display $monitor setvcp 10 $brightness
+}
+
+function monitor-input-switch () {
+  local monitor=$1
+  local source=$2
+  local vcp_code="60"
+  if  [[ -z $1 ]]; then
+    printf "Usage: \n$0 monitor[0-9] source['HDMI', 'DP']\n"
+    return 1
+  fi 
+  case $source in 
+    "HDMI"|"hdmi")
+       source="0x11" ;;
+    "DP"|"dp")
+       source="0x0f" ;;
+    "off") 
+       vcp_code="D6"
+       source="4"    ;;
+    "on")
+       vcp_code="D6"
+       source="1"    ;;
+    *)
+       source="0x0f" ;;
+  esac
+  ddcutil --display $monitor setvcp $vcp_code $source
+}
+
+
+# activate python virtual environment in current directory, or asks to create one if doesnt already exist
+function activ-py () {
+  if [[ -f ".venv/bin/activate" ]]; then
+    source .venv/bin/activate
+  else
+    echo "Could not find dir .venv, Create? [y/n]"
+    read -r CREATE
+    if [[ $CREATE == "y" ]]; then 
+      python -m venv .venv
+      source .venv/bin/activate
+    fi
+  fi
+}
+
+# git 
+alias gs="git status"
+alias gp="git push"
+alias gcm="git commit -m"
+alias gpf="git push -f"
+alias gco="git checkout"
+alias gcb="git checkout -b"
+alias grc="git rebase --continue"
+alias gra="git rebase --abort"
+alias gfa="git fetch --all"
+alias gpl="git pull"
+alias gca="git commit --amend"
+alias ga="git add"
+alias gaa="git add --update"
+
+## ======================
+## python 
+# activate virtual env
+function activate-py() {
+  if [[ -f ".venv/bin/activate" ]]; then 
+    . .venv/bin/activate
+  else
+    echo "venv not found, create? [y/n]"
+    read -r response
+    if [[ $response == "y" ]]; then
+      python -m venv .venv
+    fi
+  fi
+}

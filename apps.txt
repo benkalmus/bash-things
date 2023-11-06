@@ -1,0 +1,23 @@
+biogenesis
+
+smplayer
+
+ktorrent
+
+subdownloader
+
+mandelbulber
+
+ktorrent
+
+ddc control 
+
+htop 
+
+spotify
+
+stellarum
+
+pavucontrol
+
+tlp #for disabling power save speakers
