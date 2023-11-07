@@ -61,7 +61,7 @@ function monitor-input-switch () {
     return 1
   fi 
   case $source in 
-    "HDMI"|"hdmi")
+    "HDMI"|"hdmi"|"hd")
        source="0x11" ;;
     "DP"|"dp")
        source="0x0f" ;;
@@ -104,6 +104,7 @@ alias gra="git rebase --abort"
 alias gfa="git fetch --all"
 alias gpl="git pull"
 alias gca="git commit --amend"
+alias gcae="git commit --amend --no-edit"
 alias ga="git add"
 alias gaa="git add --update"
 
