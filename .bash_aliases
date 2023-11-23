@@ -3,27 +3,13 @@
 
 # audio control 
 
-# swap audio left right for quadraphonic setup
-
-function audio-swap-lr () {
-  sudo cp /usr/share/pulseaudio/alsa-mixer/profile-sets/quadraphonic_swap_LR.conf /usr/share/pulseaudio/alsa-mixer/profile-sets/default.conf
-  if [[ $? -ne 0 ]]; then return; fi 
-  pulseaudio -k
-  sleep 0.3
-  pulseaudio --start
-}
-
-function audio-default () {
-  sudo cp /usr/share/pulseaudio/alsa-mixer/profile-sets/quadraphonic_default.conf /usr/share/pulseaudio/alsa-mixer/profile-sets/default.conf
-  if [[ $? -ne 0 ]]; then return; fi
-  pulseaudio -k
-  sleep 0.3
-  pulseaudio --start
-}
-
 # monitor control 
 
-function brt-all () {
+function brt () {
+  if [[ ! -z $2 ]]; then
+    brt-one $1 $2
+    return 0
+  fi 
   if [[ -z $1 ]]; then
     printf "Usage:\nbrt-all brightness[0-100]\n"
     ddcutil --display 1 getvcp 10
@@ -38,7 +24,7 @@ function brt-all () {
   done
 }
 
-function brt () {
+function brt-one () {
   local monitor=$1
   local brightness=$2
   if [[ -z "$2"  ]] || [[ -z "$1" ]]; then 
@@ -77,6 +63,8 @@ function monitor-input-switch () {
   ddcutil --display $monitor setvcp $vcp_code $source
 }
 
+alias monitor-work="monitor-input-switch 2 hdmi; monitor-input-switch 3 hdmi"
+alias monitor-home="monitor-input-switch 2 dp; monitor-input-switch 3 dp"
 
 # activate python virtual environment in current directory, or asks to create one if doesnt already exist
 function activ-py () {
@@ -104,7 +92,7 @@ alias gra="git rebase --abort"
 alias gfa="git fetch --all"
 alias gpl="git pull"
 alias gca="git commit --amend"
-alias gcae="git commit --amend --no-edit"
+alias gcaa="git commit --amend --no-edit"
 alias ga="git add"
 alias gaa="git add --update"
 
@@ -122,3 +110,7 @@ function activate-py() {
     fi
   fi
 }
+
+# linux audio 
+
+alias pipewire-restart="systemctl --user restart pipewire pipewire-pulse"

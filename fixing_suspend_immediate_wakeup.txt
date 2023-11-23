@@ -1,0 +1,9 @@
+sudo su 
+
+grep enabled /proc/acpi/wakeup
+
+#the culprit:
+echo GPP0  > /proc/acpi/wakeup
+
+#no need to restart, just suspend and see if PC wakes up.
+
