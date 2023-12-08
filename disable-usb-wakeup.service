@@ -1,0 +1,9 @@
+[Unit]
+Description=Disables wake from suspend on the following devices. Intended to fix instant wake up from sleep. 
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "echo GPP0 >> /proc/acpi/wakeup; echo PTXH >> /proc/acpi/wakeup; echo PT20 >> /proc/acpi/wakeup"
+
+[Install]
+WantedBy=multi-user.target

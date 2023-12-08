@@ -7,3 +7,11 @@ echo GPP0  > /proc/acpi/wakeup
 
 #no need to restart, just suspend and see if PC wakes up.
 
+## alterntaively
+
+add the disable-usb-wakeup.service file to 
+/etc/systemd/system
+
+#run with 
+
+systemctl enable disable-usb-wakeup.service

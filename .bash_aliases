@@ -38,6 +38,21 @@ function brt-one () {
   ddcutil --display $monitor setvcp 10 $brightness
 }
 
+function contrast() {
+  if [[ -z $1 ]]; then
+    printf "Usage:\n$0 contrast[0-100]\n"
+    ddcutil --display 1 getvcp 12
+    return 1
+  fi
+  local cont=${1:-50}
+  local monitors=$( ddcutil detect | grep -Po "Display \d" | wc -l )
+  for i in $(seq 1 $monitors );do
+    echo "ddcutil --display $i setvcp 12 $cont"
+    echo "Current Contrast:"
+    ddcutil --display $i setvcp 12 $cont >/dev/null
+  done
+}
+
 function monitor-input-switch () {
   local monitor=$1
   local source=$2
@@ -74,7 +89,7 @@ function activ-py () {
     echo "Could not find dir .venv, Create? [y/n]"
     read -r CREATE
     if [[ $CREATE == "y" ]]; then 
-      python -m venv .venv
+      python3 -m venv .venv
       source .venv/bin/activate
     fi
   fi
@@ -106,10 +121,12 @@ function activate-py() {
     echo "venv not found, create? [y/n]"
     read -r response
     if [[ $response == "y" ]]; then
-      python -m venv .venv
+      python3 -m venv .venv
     fi
   fi
 }
+
+alias python="python3"
 
 # linux audio 
 
