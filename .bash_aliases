@@ -78,8 +78,8 @@ function monitor-input-switch () {
   ddcutil --display $monitor setvcp $vcp_code $source
 }
 
-alias monitor-work="monitor-input-switch 2 hdmi; monitor-input-switch 3 hdmi"
-alias monitor-home="monitor-input-switch 2 dp; monitor-input-switch 3 dp"
+alias monitor-work="monitor-input-switch 1 hdmi; monitor-input-switch 2 hdmi"
+alias monitor-home="monitor-input-switch 1 dp; monitor-input-switch 2 dp"
 
 # activate python virtual environment in current directory, or asks to create one if doesnt already exist
 function activ-py () {
