@@ -131,3 +131,6 @@ alias python="python3"
 # linux audio 
 
 alias pipewire-restart="systemctl --user restart pipewire pipewire-pulse"
+
+# mosh 
+alias msh='mosh --no-init --ssh="ssh -p 22"'
