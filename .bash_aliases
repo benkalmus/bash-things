@@ -1,8 +1,6 @@
 
 # bash aliases 
 
-# audio control 
-
 # monitor control 
 
 function brt () {
@@ -48,8 +46,8 @@ function contrast() {
   local monitors=$( ddcutil detect | grep -Po "Display \d" | wc -l )
   for i in $(seq 1 $monitors );do
     echo "ddcutil --display $i setvcp 12 $cont"
-    echo "Current Contrast:"
-    ddcutil --display $i setvcp 12 $cont >/dev/null
+    echo "Current Contrast: "
+    ddcutil --display $i setvcp 12 $cont
   done
 }
 
@@ -79,21 +77,9 @@ function monitor-input-switch () {
 }
 
 alias monitor-work="monitor-input-switch 1 hdmi; monitor-input-switch 2 hdmi"
+alias monitor-left-work="monitor-input-switch 1 hd; monitor-input-switch 2 dp"
 alias monitor-home="monitor-input-switch 1 dp; monitor-input-switch 2 dp"
 
-# activate python virtual environment in current directory, or asks to create one if doesnt already exist
-function activ-py () {
-  if [[ -f ".venv/bin/activate" ]]; then
-    source .venv/bin/activate
-  else
-    echo "Could not find dir .venv, Create? [y/n]"
-    read -r CREATE
-    if [[ $CREATE == "y" ]]; then 
-      python3 -m venv .venv
-      source .venv/bin/activate
-    fi
-  fi
-}
 
 # git 
 alias gs="git status"
@@ -110,26 +96,34 @@ alias gca="git commit --amend"
 alias gcaa="git commit --amend --no-edit"
 alias ga="git add"
 alias gaa="git add --update"
+alias gr="git restore"
+alias grs="git restore --staged"
+
+# docker 
+alias d="docker"
+alias dc="docker compose"
+alias dci="docker images -a"
+alias dps="docker ps -a"
 
 ## ======================
 ## python 
-# activate virtual env
-function activate-py() {
-  if [[ -f ".venv/bin/activate" ]]; then 
-    . .venv/bin/activate
+# activate python virtual environment in current directory, or asks to create one if doesnt already exist
+function activ-py () {
+  if [[ -f ".venv/bin/activate" ]]; then
+    source .venv/bin/activate
   else
-    echo "venv not found, create? [y/n]"
-    read -r response
-    if [[ $response == "y" ]]; then
+    echo "Could not find dir .venv, Create? [y/n]"
+    read -r CREATE
+    if [[ $CREATE == "y" ]]; then 
       python3 -m venv .venv
+      source .venv/bin/activate
     fi
   fi
 }
 
-alias python="python3"
+alias py="python3"
 
 # linux audio 
-
 alias pipewire-restart="systemctl --user restart pipewire pipewire-pulse"
 
 # mosh 
