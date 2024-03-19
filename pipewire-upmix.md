@@ -4,11 +4,27 @@ copy those files to /etc/pipewire
 BUT FIRST
 
 grep upmix configs and set them to true!
-then copy the files over to: 
 
+these will apply system-wide
+then copy the files over to
+
+```sh
 sudo nano /etc/pipewire/pipewire-pulse.conf
+```
 
 and run 
-systemclt restart --user --now pipewire-pulse pipewire
+```sh
+systemctl restart --user --now pipewire-pulse pipewire
+```
 
-hope that helps
+
+=========== Updated instructions! ========
+Applied to local user account only
+
+create dir `mkdir -p ~/.config/pipewire/pipewire-pulse.conf.d/`
+new file
+```
+vim pipewire-pulse.conf
+
+# paste in upmix.conf
+```
